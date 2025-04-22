@@ -1,0 +1,7 @@
+name: spotify-backup
+services:
+  spotify-backup:
+    container_name: spotify-backup
+    build: .
+    volumes:
+      - .data:/data
