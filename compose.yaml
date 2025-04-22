@@ -3,6 +3,7 @@ services:
   spotify-backup:
     container_name: spotify-backup
     build: .
+    restart: unless-stopped
     volumes:
       - .data:/data
     env_file: ".env"
