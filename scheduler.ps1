@@ -9,6 +9,35 @@ function Write-Log {
     Write-Host "$(Get-Date -UFormat '%F-%T') : $Message"
 }
 
+
+function Execute-Backup {
+    param (
+        $BackupPrefix,
+        $BackupStorePath
+    )
+    Write-Log 'Backing up'
+    $backupFileName = "$BackupPrefix-$(Get-Date -AsUTC -UFormat '%F-%H-%M').json"
+    Backup-Library -Path "$BackupStorePath/$backupFileName"
+    Write-Log "Library backed up to file '$backupFileName'"
+}
+
+function Clean-Backups {
+    param (
+        $BackupRetention,
+        $BackupStorePath
+    )
+    Write-Log 'Cleaning up old backups'
+    $backupFiles = Get-ChildItem -Path $env:BACKUP_STORE_PATH -Filter "$BackupPrefix-*" | Sort-Object -Property Name
+    if (-not($backupFiles.Count -gt $BackupRetention)) {
+        Write-Log 'No backup file over retention to remove'
+        return
+    }
+    foreach ($file in $backupFiles[0..$($backupFiles.Count - $BackupRetention - 1)]) {
+        Remove-Item $file
+        Write-Log "$($file.Name) removed"
+    }
+}
+
 Write-Log "===== spotifybackup v$VersionNumber ====="
 
 # Parse ENV
@@ -45,25 +74,12 @@ while ($true) {
 
     if ($lastBackupTime -lt $todayBackupTime -and $todayBackupTime -le $now) {
 
-        Write-Log 'Backup Time'
-        $backupFileName = "$BackupPrefix-$(Get-Date -AsUTC -UFormat '%F-%H-%M').json"
-        Backup-Library -Path "$env:BACKUP_STORE_PATH/$backupFileName"
-        Write-Log "Library backed up to file '$backupFileName'"
-
-        Write-Log 'Cleanup'
-        $backupFiles = Get-ChildItem -Path $env:BACKUP_STORE_PATH -Filter "$BackupPrefix-*" | Sort-Object -Property Name
-        if ($backupFiles.Count -gt $BackupRetention) {
-            foreach ($file in $backupFiles[0..$($backupFiles.Count - $BackupRetention - 1)]) {
-                Remove-Item $file
-                Write-Log "$($file.Name) removed"
-            }
-        }
-        else { Write-Log 'No backup file over retention to remove' }
+        Execute-Backup $BackupPrefix $env:BACKUP_STORE_PATH
+        Clean-Backups $BackupRetention $env:BACKUP_STORE_PATH
+        Write-Log 'Backup process finished'
 
         # Update last backup time
         $lastBackupTime = $todayBackupTime
-
-        Write-Log 'Backup process finished'
     }
 
     # Wait 1 second
