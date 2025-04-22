@@ -20,6 +20,8 @@ You first need to create a Spotify Application.
 
 To setup Spotify connection, you need to run the image in "setup mode" using this commandline and follow instruction:  
 `docker run -it --rm -v spotifybackup:/data --entrypoint pwsh domochip/spotifybackup setup.ps1`
+or the following if you are using docker compose:
+`docker compose run --entrypoint=pwsh spotify-backup setup.ps1`
 
 ### E.g:  
 Provide Client ID and Client Secret then copy authorization URL:  
@@ -49,19 +51,14 @@ docker run \
 
 Docker-Compose Quick-Run  
 ```yaml
-version: '3'
-volumes:
-  spotifybackup:
+name: spotify-backup
 services:
-  spotifybackup:
-    container_name: spotifybackup
-    image: domochip/spotifybackup
+  spotify-backup:
+    container_name: spotify-backup
+    build: .
     volumes:
-      - spotifybackup:/data
-    environment:
-      - BACKUPHOUR=2
-      - BACKUPRETENTION=30
-      - BACKUPPREFIX=SpotifyBackup
+      - .data:/data
+    env_file: ".env"
 ```
 (Backup your library everyday at 2:00PM)
 
