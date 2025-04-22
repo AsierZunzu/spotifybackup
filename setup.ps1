@@ -2,8 +2,8 @@ Import-Module Spotishell
 
 Write-Host "===== spotifybackup SETUP ====="
 
-$SpotifyClientId = Read-Host -Prompt 'Please provide Spotify Client ID'
-$SpotifyClientSecret = Read-Host -Prompt 'Please provide Spotify Client Secret'
+$SpotifyClientId = $env:CLIENT_ID ?? (Read-Host -Prompt 'Please provide Spotify Client ID')
+$SpotifyClientSecret = $env:CLIENT_SECRET ?? (Read-Host -Prompt 'Please provide Spotify Client Secret')
 
 try {
     $spotApp = Get-SpotifyApplication

@@ -12,9 +12,9 @@ function Write-Log {
 Write-Log "===== spotifybackup v$VersionNumber ====="
 
 # Parse ENV
-$BackupHour = $env:BACKUPHOUR ?? 2
-$BackupRetention = $env:BACKUPRETENTION ?? 30
-$BackupPrefix = $env:BACKUPPREFIX ?? 'SpotifyBackup'
+$BackupHour = $env:BACKUP_HOUR ?? 2
+$BackupRetention = $env:BACKUP_RETENTION ?? 30
+$BackupPrefix = $env:BACKUP_PREFIX ?? 'SpotifyBackup'
 
 
 # Verify Spotify Application
