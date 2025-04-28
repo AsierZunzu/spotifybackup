@@ -5,5 +5,5 @@ services:
     build: .
     restart: unless-stopped
     volumes:
-      - .data:/data
+      - "${BACKUP_PATH}:/data"
     env_file: ".env"
