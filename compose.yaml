@@ -1,9 +1,9 @@
 name: spotify-backup
 services:
   spotify-backup:
-    container_name: spotify-backup
     build: .
-    restart: unless-stopped
+    container_name: spotify-backup
     volumes:
-      - "${BACKUP_PATH}:/data"
+      - ${BACKUP_PATH}:/data
     env_file: ".env"
+    restart: unless-stopped
