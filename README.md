@@ -1,6 +1,6 @@
 # spotifybackup
 
-This Docker  image allows you to automate a full backup of your Spotify Library every day using [Spotishell PS module](https://github.com/wardbox/spotishell).  
+This Docker image allows you to automate a full backup of your Spotify Library every day using [Spotishell PS module](https://github.com/wardbox/spotishell).  
 This full backup can be used to be restored over your account or another one.  
 
 # Prerequisites
@@ -18,7 +18,7 @@ You first need to create a Spotify Application.
 
 # Setup connection to Spotify
 
-To setup Spotify connection, you need to run the image in "setup mode" using this commandline and follow instruction:  
+To set up Spotify connection, you need to run the image in "setup mode" using this commandline and follow instruction:  
 `docker run -it --rm -v spotifybackup:/data --entrypoint pwsh domochip/spotifybackup setup.ps1`
 or the following if you are using docker compose:
 `docker compose run --entrypoint=pwsh spotify-backup setup.ps1`
@@ -60,7 +60,7 @@ services:
       - .data:/data
     env_file: ".env"
 ```
-(Backup your library everyday at 2:00PM)
+(Backup your library every day at 2:00PM)
 
 #### Environment variables
 * `BACKUPHOUR`: **Optional**, (Integer: 0 to 23) hour of publish everyday
